@@ -125,7 +125,7 @@ function joinads_loader_html() {
                     function setupAdListener() {
                         window.googletag = window.googletag || {cmd: []};
                         googletag.cmd.push(() => {
-                            googletag.pubads().addEventListener('slotRenderEnded', event => {
+                            googletag.pubads().addEventListener('slotOnload', event => {
                                 if (!event.isEmpty &&
                                     (
                                         Array.isArray(waitSlotRender) && waitSlotRender.includes(event.slot.getSlotElementId())
