@@ -17,14 +17,14 @@ function joinads_loader_settings_init() {
 
     add_settings_section(
         'joinads_loader_joinAdsLoader_section',
-        __('Customize your loader settings', 'wordpress'),
+        __('Configurações do Plugin Join Ads Loader', 'wordpress'),
         'joinads_loader_settings_section_callback',
         'joinAdsLoader'
     );
 
     add_settings_field(
         'joinads_loader_color',
-        __('Loader Color', 'wordpress'),
+        __('Cor do Loader', 'wordpress'),
         'joinads_loader_color_render',
         'joinAdsLoader',
         'joinads_loader_joinAdsLoader_section'
@@ -32,7 +32,7 @@ function joinads_loader_settings_init() {
 
     add_settings_field(
         'joinads_loader_timeout',
-        __('Loader Timeout (in seconds)', 'wordpress'),
+        __('Tempo do Loader (em segundos)', 'wordpress'),
         'joinads_loader_timeout_render',
         'joinAdsLoader',
         'joinads_loader_joinAdsLoader_section'
@@ -40,7 +40,7 @@ function joinads_loader_settings_init() {
 
     add_settings_field(
         'joinads_loader_ad_block',
-        __('Ad Block to wait for', 'wordpress'),
+        __('Nome do Bloco de Anuncio', 'wordpress'),
         'joinads_loader_ad_block_render',
         'joinAdsLoader',
         'joinads_loader_joinAdsLoader_section'
