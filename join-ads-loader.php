@@ -10,7 +10,7 @@ Plugin URI: https://github.com/joinads/plugin-join-ads-loader
 GitHub Plugin URI: https://github.com/joinads/plugin-join-ads-loader
 GitHub Branch: main
 */
-
+define('JOINADS_LOADER_FILE', __FILE__);
 
 require_once(__DIR__ . '/setup.php');
 require_once(__DIR__ . '/functions.php');
