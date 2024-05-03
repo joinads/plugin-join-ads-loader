@@ -6,6 +6,9 @@ Description: Adds a loading screen to your site until the page is fully loaded.
 Version: 1.0
 Author: Caio Norder
 Author URI: https://joinads.me
+Plugin URI: https://github.com/joinads/plugin-join-ads-loader
+GitHub Plugin URI: https://github.com/joinads/plugin-join-ads-loader
+GitHub Branch: main
 */
 
 // Enqueue the loader styles
