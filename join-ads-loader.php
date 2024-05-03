@@ -3,7 +3,7 @@
 Plugin Name: Join Ads Loader
 Plugin URI: https://joinads.me
 Description: Adds a loading screen to your site until the page is fully loaded.
-Version: 1.2
+Version: 1.3
 Author: Caio Norder
 Author URI: https://joinads.me
 Plugin URI: https://github.com/joinads/plugin-join-ads-loader
@@ -11,9 +11,8 @@ GitHub Plugin URI: https://github.com/joinads/plugin-join-ads-loader
 GitHub Branch: main
 */
 
-include 'update.php';
-include 'setup.php';
-
+include(__DIR__ . 'update.php');
+include(__DIR__ . 'setup.php');
 
 // Enqueue the loader styles
 function joinads_loader_styles() {
