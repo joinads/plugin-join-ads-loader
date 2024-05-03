@@ -2,7 +2,7 @@
 
 function joinads_loader_add_admin_menu() {
     add_options_page(
-        'Join Ads Loader Settings',
+        'Join Ads Loader',
         'Join Ads Loader',
         'manage_options',
         'join_ads_loader',
@@ -32,7 +32,7 @@ function joinads_loader_settings_init() {
 
     add_settings_field(
         'joinads_loader_timeout',
-        __('Tempo do Loader (em segundos)', 'wordpress'),
+        __('Tempo do Loader (em segundos que o loader pode esperar até a compra do anúncio)', 'wordpress'),
         'joinads_loader_timeout_render',
         'joinAdsLoader',
         'joinads_loader_joinAdsLoader_section'
@@ -71,7 +71,7 @@ function joinads_loader_ad_block_render() {
 }
 
 function joinads_loader_settings_section_callback() {
-    echo __('Set your preferences for the Join Ads Loader.', 'wordpress');
+    echo __('Configure de acordo com sua preferencia', 'wordpress');
 }
 
 function joinads_loader_options_page() {
