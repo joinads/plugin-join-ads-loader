@@ -11,7 +11,8 @@ GitHub Plugin URI: https://github.com/joinads/plugin-join-ads-loader
 GitHub Branch: main
 */
 
-require_once(__DIR__ . '/update.php');
+
 require_once(__DIR__ . '/setup.php');
 require_once(__DIR__ . '/functions.php');
 require_once(__DIR__ . '/loader.php');
+require_once(__DIR__ . '/update.php');

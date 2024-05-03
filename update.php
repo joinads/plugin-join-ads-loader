@@ -4,7 +4,7 @@ function joinads_loader_check_update() {
     $plugin_data = get_plugin_data(__FILE__);
     $current_version = $plugin_data['Version'];
 
-    $url = "https://raw.githubusercontent.com/joinads/plugin-join-ads-loader/main/version.json";
+    $url = "https://raw.githubusercontent.com/joinads/plugin-join-ads-loader/main/version.json?ver=" . time();
     $response = wp_remote_get($url, array(
         'headers' => array(
             'User-Agent' => 'WordPress/' . $plugin_slug,
@@ -35,7 +35,7 @@ function joinads_loader_inject_update($transient) {
     $update_info = get_option('join_ads_loader_update_info');
     if ($update_info) {
         $obj = new stdClass();
-        $obj->slug = 'join-ads-loader'; // Deve ser o mesmo slug do diretório do plugin
+        $obj->slug = 'plugin-join-ads-loader'; // Deve ser o mesmo slug do diretório do plugin
         $obj->new_version = $update_info['new_version'];
         $obj->url = $update_info['url'];
         $obj->package = $update_info['package']; // URL do arquivo ZIP da nova versão
