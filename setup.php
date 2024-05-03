@@ -1,33 +1,15 @@
 <?php
 
 function joinads_loader_add_admin_menu() {
-    add_menu_page(
-        'Join Ads Loader Settings',   // Título da página
-        'Join Ads Loader',            // Título do menu
-        'manage_options',             // Capacidade necessária para ver este menu
-        'join_ads_loader',            // Slug do menu
-        'joinads_loader_options_page', // Função que renderiza a página de opções
-        'dashicons-admin-generic',    // Ícone do menu
-        6                             // Posição do menu
+    add_options_page(
+        'Join Ads Loader Settings',
+        'Join Ads Loader',
+        'manage_options',
+        'join_ads_loader',
+        'joinads_loader_options_page'
     );
 }
 add_action('admin_menu', 'joinads_loader_add_admin_menu');
-
-function joinads_loader_options_page() {
-    ?>
-    <div class="wrap">
-        <h2>Join Ads Loader Settings</h2>
-        <form action="options.php" method="post">
-            <?php
-            settings_fields('joinAdsLoader');
-            do_settings_sections('joinAdsLoader');
-            submit_button();
-            ?>
-        </form>
-    </div>
-    <?php
-}
-
 
 
 function joinads_loader_settings_init() {
@@ -93,30 +75,39 @@ function joinads_loader_settings_section_callback() {
 }
 
 function joinads_loader_options_page() {
-    ?>
-    <div class="wrap">
-        <h2>Join Ads Loader Settings</h2>
-        <form action='options.php' method='post'>
-            <?php
-            settings_fields('joinAdsLoader');
-            do_settings_sections('joinAdsLoader');
-            submit_button();
-            ?>
-        </form>
-    </div>
-    <?php
+    echo '<div class="wrap">';
+    echo '<h2>Join Ads Loader Settings</h2>';
+    echo '<form action="options.php" method="post">';
+
+    if (function_exists('settings_fields')) {
+        settings_fields('joinAdsLoader');
+    } else {
+        echo 'Erro: função settings_fields não existe.';
+    }
+
+    if (function_exists('do_settings_sections')) {
+        do_settings_sections('joinAdsLoader');
+    } else {
+        echo 'Erro: função do_settings_sections não existe.';
+    }
+
+    if (function_exists('submit_button')) {
+        submit_button();
+    } else {
+        echo 'Erro: função submit_button não existe.';
+    }
+
+    echo '</form>';
+    echo '</div>';
 }
+
 
 function joinads_loader_enqueue_color_picker($hook_suffix) {
-    if('toplevel_page_join_ads_loader' !== $hook_suffix)
+    if ('settings_page_join_ads_loader' !== $hook_suffix) {
         return;
-
+    }
     wp_enqueue_style('wp-color-picker');
-    wp_enqueue_script('joinads-loader-script-handle', plugins_url('my-script.js', __FILE__ ), array('wp-color-picker'), false, true);
+    wp_enqueue_script('joinads-loader-script-handle', plugins_url('script.js', __FILE__ ), array('wp-color-picker'), false, true);
 }
 add_action('admin_enqueue_scripts', 'joinads_loader_enqueue_color_picker');
-
-// In your JavaScript file:
-jQuery(document).ready(function($){
-    $('.my-color-field').wpColorPicker();
-});
+?>
