@@ -95,6 +95,7 @@ function joinads_loader_html() {
                   </div>
                 <script>
                     window.scrollTo({top: 0, behavior: 'smooth'});
+                    disableScroll();
 
                     let loader = document.querySelector('#joinadsloader__wrapper');
                     let waitSlotRender = ['$adunit'];
@@ -121,6 +122,7 @@ function joinads_loader_html() {
                             });
                             div.style = 'animation: joinadsloader-fadeOut 0.5s forwards;';
                         }
+                        enableScroll();
                     }
 
                     function waitFor(conditionFunction) {
@@ -146,6 +148,18 @@ function joinads_loader_html() {
                             });
                         });
                     } 
+                    function disableScroll() {
+                        document.body.style.overflow = 'hidden';
+                        document.body.style.position = 'fixed';
+                        document.body.style.width = '100%';
+                    }
+
+                    function enableScroll() {
+                        document.body.style.overflow = '';
+                        document.body.style.position = '';
+                        document.body.style.width = '';
+                    }            
+                    
                 </script>
                 EOD;
     echo minificar($data);
