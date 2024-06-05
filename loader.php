@@ -137,10 +137,11 @@ function joinads_loader_html() {
                         window.googletag = window.googletag || {cmd: []};
                         googletag.cmd.push(() => {
                             googletag.pubads().addEventListener('slotOnload', event => {
-                                if (!event.isEmpty &&
-                                    (
-                                        Array.isArray(waitSlotRender) && waitSlotRender.includes(event.slot.getSlotElementId())
-                                    )) {
+                                if (!event.isEmpty) {
+                                    adLoaded = true;
+                                    fadeOut(loader);
+                                }
+                                if (Array.isArray(waitSlotRender) && waitSlotRender.includes(event.slot.getSlotElementId())) {
                                     waitFor(() => true).then(() => {
                                         fadeOut(loader);
                                     });
@@ -148,6 +149,8 @@ function joinads_loader_html() {
                             });
                         });
                     } 
+
+
                     function disableScroll() {
                         document.body.style.overflow = 'hidden';
                         document.body.style.position = 'fixed';
