@@ -1,4 +1,30 @@
 <?php
+function joinads_add_preconnect_and_dns_prefetch() {
+    $infos = '
+    <link rel="dns-prefetch" href="https://pageview.joinads.me">
+    <link rel="dns-prefetch" href="https://office.joinads.me">
+    <link rel="dns-prefetch" href="https://script.joinads.me">
+    
+    <link rel="preconnect" href="https://pageview.joinads.me">
+    <link rel="preconnect" href="https://office.joinads.me">
+    <link rel="preconnect" href="https://script.joinads.me">
+    ';
+
+    $options = get_option('joinads_loader_config_settings');
+    if($options['id_domain']){
+        $infos .= '
+        <link rel="preload" href="https://script.joinads.me/myad'.$options['id_domain'].'.js" crossorigin="anonymous" as="script">
+        <script type="module" src="https://script.joinads.me/myad'.$options['id_domain'].'.js" crossorigin="anonymous" async></script>
+        ';
+    }
+
+    echo minificar($infos);
+}
+add_action('wp_head', 'joinads_add_preconnect_and_dns_prefetch',-1);
+
+
+
+
 function joinads_loader_styles() {
     $options = get_option('joinads_loader_settings');
     if (empty($options['joinads_loader_color'])) {
@@ -90,7 +116,11 @@ function joinads_loader_html() {
     }
 
     if(is_home() || is_front_page()){
-        $timeout = 3000;
+        if (empty($options['joinads_loader_timeout_home'])) {
+            $timeout = 3000;
+        } else {
+            $timeout = $options['joinads_loader_timeout_home']*1000;
+        }
     }
 
     $data = <<<EOD

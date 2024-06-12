@@ -2,8 +2,8 @@
 /*
 Plugin Name: Join Ads Loader
 Plugin URI: https://joinads.me
-Description: Loader feito para monetização otimizado no carregamento do bloco de anuncio.
-Version: 1.8
+Description: Loader para uma melhor experiencia com a Join Ads.
+Version: 1.9
 Author: Caio Norder
 Author URI: https://joinads.me
 Plugin URI: https://github.com/joinads/plugin-join-ads-loader
