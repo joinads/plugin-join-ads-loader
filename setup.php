@@ -232,6 +232,15 @@ function joinads_loader_register_config_settings() {
         'join_ads_config',
         'joinads_loader_main_section'
     );
+
+    // Adicionar campo ShortLink
+    add_settings_field(
+        'joinads_loader_short',
+        'Forçar ShortLink:',
+        'joinads_loader_short_render',
+        'join_ads_config',
+        'joinads_loader_main_section'
+    );
 }
 add_action('admin_init', 'joinads_loader_register_config_settings');
 
@@ -257,6 +266,15 @@ function joinads_loader_token_api_render() {
     <input type='text' name='joinads_loader_config_settings[token_api]' value='<?php echo isset($options['token_api']) ? esc_attr($options['token_api']) : ''; ?>'>
     <?php
 }
+
+function joinads_loader_short_render() {
+    $options = get_option('joinads_loader_config_settings');
+    $checked = isset($options['short']) ? checked(1, $options['short'], false) : '';
+    ?>
+    <input type='checkbox' name='joinads_loader_config_settings[short]' value='1' <?php echo $checked; ?>>
+    <?php
+}
+
 
 
 

@@ -22,6 +22,17 @@ function joinads_add_preconnect_and_dns_prefetch() {
 }
 add_action('wp_head', 'joinads_add_preconnect_and_dns_prefetch',-1);
 
+function add_custom_shortlink_to_head() {
+    $options = get_option('joinads_loader_config_settings');
+    if (isset($options['short']) && $options['short'] == 1) {
+        if (is_singular()) {
+            $post_id = get_the_ID();
+            $shortlink = home_url('/?p=' . $post_id);
+            echo "<link rel='shortlink' href='" . esc_url($shortlink) . "' />";
+        }
+    }
+}
+add_action('wp_head', 'add_custom_shortlink_to_head');
 
 
 
