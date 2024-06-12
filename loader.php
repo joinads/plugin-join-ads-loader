@@ -89,6 +89,10 @@ function joinads_loader_html() {
         $adunit = $options['joinads_loader_ad_block'];
     }
 
+    if(is_home() || is_front_page()){
+        $timeout = 3000;
+    }
+
     $data = <<<EOD
                 <div id="joinadsloader__wrapper">
                     <div id="joinadsloader__spinner"></div>
