@@ -1,4 +1,4 @@
 {
-    "version":1.7,
-    "info":"Correção no Sistema de busca de blocos."
+    "version":1.8,
+    "info":"Configuração de Loader para home em 3 segundos por default."
 }
