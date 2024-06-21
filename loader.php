@@ -212,5 +212,9 @@ function joinads_loader_html() {
                 EOD;
     echo minificar($data);
 }
+if (!function_exists('wp_body_open')) {
+    add_action('wp_footer', 'joinads_loader_html');    
+} else {
+    add_action('wp_body_open', 'joinads_loader_html');
+}
 
-add_action('wp_body_open', 'joinads_loader_html');
