@@ -11,6 +11,7 @@ class JoinAds_Admin
 
 	public function __construct()
 	{
+		// Remove o hook do menu daqui, pois está sendo chamado duas vezes
 		add_action('admin_enqueue_styles', 'wgm_register_styles');
 		add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_assets'));
 		add_action('admin_init', array($this, 'register_settings'));
@@ -264,6 +265,7 @@ class JoinAds_Admin
 
 	public function add_admin_menu()
 	{
+		// Adiciona o menu principal
 		add_menu_page(
 			'Join Ads',
 			'Join Ads',
@@ -273,17 +275,7 @@ class JoinAds_Admin
 			'dashicons-plugins-checked'
 		);
 
-		//Submenu Dashboard (mesmo que o menu principal)
-		add_submenu_page(
-			'join_ads_loader_main',
-			'Dashboard',
-			'Dashboard',
-			'manage_options',
-			'join_ads_loader_main',
-			array($this, 'display_dashboard_page')
-		);
-
-		//Loader Manager
+		// Adiciona os submenus
 		add_submenu_page(
 			'join_ads_loader_main',
 			'Loader Manager',
@@ -293,27 +285,6 @@ class JoinAds_Admin
 			array($this, 'display_loader_page')
 		);
 
-		//Leia Mais (Novo submenu)
-		add_submenu_page(
-			'join_ads_loader_main',
-			'Leia Mais',
-			'Leia Mais',
-			'manage_options',
-			'joinads-readmore',
-			array($this, 'display_readmore_page')
-		);
-
-		//ads.txt Manager
-		add_submenu_page(
-			'join_ads_loader_main',
-			'ads.txt Manager',
-			'ads.txt Manager',
-			'manage_options',
-			'join_ads_txt_manager',
-			array($this, 'display_ads_txt_page')
-		);
-
-		//Configurações
 		add_submenu_page(
 			'join_ads_loader_main',
 			'Configurações',
@@ -545,8 +516,3 @@ class JoinAds_Admin
 	}
 
 }
-
-// Inicializar o Admin
-add_action('plugins_loaded', function() {
-	new JoinAds_Admin();
-});

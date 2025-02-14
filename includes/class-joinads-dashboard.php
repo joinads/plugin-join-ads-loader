@@ -222,8 +222,3 @@ class JoinAds_Dashboard
         <?php
     }
 }
-
-// Inicializar o Dashboard
-add_action('plugins_loaded', function () {
-    new JoinAds_Dashboard();
-});

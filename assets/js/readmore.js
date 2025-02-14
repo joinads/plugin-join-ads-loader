@@ -5,9 +5,12 @@ jQuery(document).ready(function($) {
         const $button = $(this);
         const $hiddenContent = $button.closest('.joinads-readmore-block').next('.joinads-hidden-content');
         
-        $hiddenContent.slideDown(400);
-        $button.parent('.joinads-readmore-block').fadeOut();
-        
-    
+        if ($hiddenContent.length) {
+            $hiddenContent.slideDown(400, function() {
+                // Dispara evento de redimensionamento para recalcular anúncios
+                $(window).trigger('resize');
+            });
+            $button.parent('.joinads-readmore-block').fadeOut();
+        }
     });
 });

@@ -28,12 +28,29 @@ require_once JOINADS_LOADER_PATH . 'includes/class-joinads-public.php';
 require_once JOINADS_LOADER_PATH . 'includes/class-joinads-updater.php';
 require_once JOINADS_LOADER_PATH . 'includes/class-joinads-api.php';
 require_once JOINADS_LOADER_PATH . 'includes/class-joinads-readmore.php';
+require_once JOINADS_LOADER_PATH . 'includes/class-joinads-dashboard.php';
 
 // Inicialização do plugin
 if (!function_exists('joinads_loader_init')) {
     function joinads_loader_init() {
-        $plugin = new JoinAds_Loader();
-        $plugin->run();
+        // Verifica se todas as classes necessárias existem
+        if (
+            class_exists('JoinAds_Loader') &&
+            class_exists('JoinAds_Admin') &&
+            class_exists('JoinAds_Public') &&
+            class_exists('JoinAds_Updater') &&
+            class_exists('JoinAds_ReadMore') &&
+            class_exists('JoinAds_Dashboard')
+        ) {
+            $plugin = new JoinAds_Loader();
+            
+            // Garante que o plugin seja inicializado
+            add_action('init', function() use ($plugin) {
+                $plugin->run();
+            });
+        }
     }
 }
-add_action('plugins_loaded', 'joinads_loader_init');
+
+// Muda a prioridade para garantir que todas as classes estejam carregadas
+add_action('plugins_loaded', 'joinads_loader_init', 20);
