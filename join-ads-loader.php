@@ -30,6 +30,8 @@ require_once JOINADS_LOADER_PATH . 'includes/class-joinads-api.php';
 require_once JOINADS_LOADER_PATH . 'includes/class-joinads-readmore.php';
 require_once JOINADS_LOADER_PATH . 'includes/class-joinads-dashboard.php';
 
+
+// Inicialização do plugin
 // Inicialização do plugin
 if (!function_exists('joinads_loader_init')) {
     function joinads_loader_init() {
