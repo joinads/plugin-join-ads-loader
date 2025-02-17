@@ -80,8 +80,7 @@ async function run() {
                     content: analysisContext
                 }
             ],
-            temperature: 0.8,
-            max_tokens: 2000
+            temperature: 0.8
         });
 
         const reviewComment = response.choices[0].message.content;
