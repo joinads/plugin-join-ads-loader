@@ -1,0 +1,10 @@
+{
+  "name": "pr-code-review",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "@actions/github": "^5.1.1",
+    "@octokit/rest": "^21.1.0",
+    "openai": "^4.85.1"
+  }
+}
