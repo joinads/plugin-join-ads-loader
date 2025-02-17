@@ -2,42 +2,25 @@ import { Octokit } from '@octokit/rest';
 import OpenAI from 'openai';
 import { context } from '@actions/github';
 
-async function run() {
-    try {
-        // Initialize clients
-        const openai = new OpenAI({
-            apiKey: process.env.OPENAI_API_KEY
-        });
+async function analyzeChanges(openai, files, prInfo) {
+    // Dividir arquivos em grupos menores para análise
+    const FILES_PER_ANALYSIS = 3;
+    const fileGroups = [];
+    
+    for (let i = 0; i < files.length; i += FILES_PER_ANALYSIS) {
+        fileGroups.push(files.slice(i, i + FILES_PER_ANALYSIS));
+    }
 
-        const octokit = new Octokit({
-            auth: process.env.GITHUB_TOKEN
-        });
+    let allAnalysis = [];
 
-        // Get PR details from context
-        const { pull_request } = context.payload;
-        
-        if (!pull_request) {
-            console.log('No pull request found in context');
-            return;
-        }
-
-        console.log(`Processing PR #${pull_request.number}`);
-
-        // Get PR files
-        const { data: files } = await octokit.pulls.listFiles({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            pull_number: pull_request.number
-        });
-
-        // Prepare context for analysis
+    for (let i = 0; i < fileGroups.length; i++) {
+        const groupFiles = fileGroups[i];
         const analysisContext = `
-            Pull Request #${pull_request.number}
-            Title: ${pull_request.title}
-            Description: ${pull_request.body || 'No description provided'}
+            Pull Request #${prInfo.number}
+            Title: ${prInfo.title}
             
-            Changes:
-            ${files.map(file => `
+            Analisando grupo de arquivos ${i + 1}/${fileGroups.length}:
+            ${groupFiles.map(file => `
             File: ${file.filename}
             Status: ${file.status}
             Additions: ${file.additions}
@@ -48,9 +31,8 @@ async function run() {
             `).join('\n')}
         `;
 
-        console.log('Analyzing PR with OpenAI...');
+        console.log(`Analyzing file group ${i + 1}/${fileGroups.length}...`);
 
-        // Analyze with GPT
         const response = await openai.chat.completions.create({
             model: "gpt-4",
             messages: [
@@ -69,11 +51,8 @@ async function run() {
                     - Sugere testes quando apropriado
                     - Se for logica de programação analise se esta dentro dos padrões do SOLID.
                     
-                    Forneça o feedback em português, organizando por categorias:
-                    1. Problemas Críticos (se houver)
-                    2. Sugestões de Melhorias
-                    3. Boas Práticas
-                    4. Observações Gerais`
+                    Analise apenas os arquivos fornecidos neste grupo.
+                    Seja conciso e direto, focando apenas nos pontos mais importantes.`
                 },
                 {
                     role: "user",
@@ -83,11 +62,69 @@ async function run() {
             temperature: 0.8
         });
 
-        const reviewComment = response.choices[0].message.content;
+        allAnalysis.push(response.choices[0].message.content);
+    }
+
+    // Gerar resumo final
+    if (allAnalysis.length > 1) {
+        const summaryResponse = await openai.chat.completions.create({
+            model: "gpt-4",
+            messages: [
+                {
+                    role: "system",
+                    content: `Você é um revisor de código que deve consolidar múltiplas análises em um único resumo coerente.
+                    Organize o feedback nas seguintes categorias:
+                    1. Problemas Críticos (se houver)
+                    2. Sugestões de Melhorias
+                    3. Boas Práticas
+                    4. Observações Gerais
+                    
+                    Seja conciso e evite repetições.`
+                },
+                {
+                    role: "user",
+                    content: `Consolide as seguintes análises em um único resumo:\n\n${allAnalysis.join('\n\n')}`
+                }
+            ],
+            temperature: 0.7,
+            max_tokens: 4000
+        });
+        
+        return summaryResponse.choices[0].message.content;
+    }
+
+    return allAnalysis[0];
+}
+
+async function run() {
+    try {
+        const openai = new OpenAI({
+            apiKey: process.env.OPENAI_API_KEY
+        });
+
+        const octokit = new Octokit({
+            auth: process.env.GITHUB_TOKEN
+        });
+
+        const { pull_request } = context.payload;
+        
+        if (!pull_request) {
+            console.log('No pull request found in context');
+            return;
+        }
+
+        console.log(`Processing PR #${pull_request.number}`);
+
+        const { data: files } = await octokit.pulls.listFiles({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: pull_request.number
+        });
+
+        const reviewComment = await analyzeChanges(openai, files, pull_request);
 
         console.log('Adding review comment to PR...');
 
-        // Add comment to PR
         await octokit.issues.createComment({
             owner: context.repo.owner,
             repo: context.repo.repo,
@@ -95,7 +132,9 @@ async function run() {
             body: `## 🔍 Análise 
 
 ${reviewComment}
-`
+
+---
+*Análise gerada automaticamente utilizando IA*`
         });
 
         console.log('Code review completed successfully');
@@ -106,5 +145,4 @@ ${reviewComment}
     }
 }
 
-// Execute the action
 run();
