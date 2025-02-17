@@ -34,14 +34,12 @@ async function analyzeChanges(openai, files, prInfo) {
         console.log(`Analyzing file group ${i + 1}/${fileGroups.length}...`);
 
         const response = await openai.chat.completions.create({
-            model: "gpt-4",
+            model: "gpt-4o",
             messages: [
                 {
                     role: "system",
                     content: `Você é um revisor de código muito crítico e experiente que:
-                    - Procura problemas de segurança
-                    - Sugere melhorias de performance
-                    - Verifica boas práticas
+                    - Verifica boas práticas e indica SOLID
                     - Dá feedback construtivo
                     - Foca em problemas críticos
                     - Faz sugestões de melhorias quando relevante
@@ -49,7 +47,6 @@ async function analyzeChanges(openai, files, prInfo) {
                     - Analisa a clareza e manutenibilidade do código
                     - Identifica possíveis bugs ou edge cases
                     - Sugere testes quando apropriado
-                    - Se for logica de programação analise se esta dentro dos padrões do SOLID.
                     
                     Analise apenas os arquivos fornecidos neste grupo.
                     Seja conciso e direto, focando apenas nos pontos mais importantes.`
@@ -86,8 +83,7 @@ async function analyzeChanges(openai, files, prInfo) {
                     content: `Consolide as seguintes análises em um único resumo:\n\n${allAnalysis.join('\n\n')}`
                 }
             ],
-            temperature: 0.7,
-            max_tokens: 4000
+            temperature: 0.7
         });
         
         return summaryResponse.choices[0].message.content;
