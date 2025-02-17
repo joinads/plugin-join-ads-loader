@@ -1,0 +1,31 @@
+name: Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  code-review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Install dependencies
+        working-directory: .github/assistant
+        run: npm install
+          
+      - name: Run Code Review
+        working-directory: .github/assistant
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI }}
+        run: node assistant.js
